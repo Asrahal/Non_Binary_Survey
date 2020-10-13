@@ -1,0 +1,83 @@
+---
+title: "Enquête sur le point de confort des personnes non-binaires"
+author: "Maxence R. Ouafik"
+date: "10/10/2020"
+output: 
+  bookdown::html_document2: default
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, widgetframe_widgets_dir = "./output")
+library(scales)
+```
+
+
+
+
+```{r Data Preparation, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+
+# En premier lieu : lire le fichier CSV généré par le Google Forms afin d'obtenir Survey_Data
+source("./scripts/read_data.R", local = knitr::knit_global())
+
+# Ensuite créer Survey_Data_AFAB à partir des données brutes. D'une part, les données sont transformées pour que chaque variable soit individualisées avec un 0 si la personne n'a pas coché la réponse et un 1, si la personne l'a cochée. 
+
+source("./scripts/create_Survey_Data_AFAB.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# Pareil pour les réponses des personnes NB AMAB
+
+source("./scripts/create_Survey_Data_AMAB.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+#Ensuite, on crée un tableau résumant les réponses de la première question destinée aux personnes AFAB (nombre de personnes ayant répondu et pourcentage) Ce tableau nous servira à créer les graphiques. 
+
+source("./scripts/create_AFAB_Conf_Sum.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# Pareil pour la 2ème question
+
+source("./scripts/create_AFAB_Inconf_Sum.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+
+```
+
+La figure\@ref(fig:AFABConfPlot) montre les différentes réponses à la question des effets attendus d'une THS par les personnes non-binaires assignées femmes à la naissance. A l'heure actuelle, `r nrow(Survey_Data)` personnes ont répondu dont `r nrow(Survey_Data_AFAB)` (`r label_percent()((nrow(Survey_Data_AFAB)/nrow(Survey_Data)))`) personnes non-binaires assignées femmes à la naissance (AFAB) et `r nrow(Survey_Data_AMAB)` (`r label_percent()((nrow(Survey_Data_AMAB)/nrow(Survey_Data)))`) personnes non-binaires assignées hommes à la naissance (AMAB). 
+
+
+Test de références [zotpressInText item="{2008972:9U9PYSVI}" format="%num%"]
+
+
+
+<center>
+```{r AFABConfPlot, echo=FALSE}
+
+source("./scripts/create_AFAB_Conf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+AFAB_Conf_Plotly
+
+```
+</center>
+
+
+
+
+
+<center>
+```{r AFABInconfPlot, fig.cap = "Effets indésirables d'une THS pour les personnes NB AFAB", echo=FALSE}
+
+source("./scripts/create_AFAB_Inconf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
+AFAB_Inconf_Plotly
+
+```
+</center>
+
+Test 
+Test mdr xxxxxx
+
+
+```{r eval=FALSE, include=FALSE}
+
+source("./scripts/update_WP.R", local = knitr::knit_global(), encoding = "UTF-8")
+```
+
+## Bibliographie
+
+[zotpressInTextBib style="bmj" sort="ASC"]

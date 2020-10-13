@@ -69,13 +69,13 @@ AFAB_Inconf_Plotly
 ```
 </center>
 
-Test 
-Test mdr xxxxxxssssS
+
+<figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/afab-conf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
 
 
 ```{r eval=FALSE, include=FALSE}
 
-source("./scripts/update_WP.R", local = knitr::knit_global(), encoding = "UTF-8")
+source("./scripts/edit_WP_post.R", local = knitr::knit_global(), encoding = "UTF-8")
 ```
 
 ## Bibliographie

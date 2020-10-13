@@ -1,5 +1,0 @@
-library(RWordPress)
-library(knitr)
-options(WordpressURL = c("https://queerologie.org/xmlrpc.php"))
-options(WordpressLogin = c( "admin" = "Erd0ni$cariote7643" ))
-knit2wp('Non_Binary_Survey.Rmd', title='Enquête sur le point de confort des personnes non-binaires', publish = TRUE, action = "editPost", postid = "214980", envir = globalenv())

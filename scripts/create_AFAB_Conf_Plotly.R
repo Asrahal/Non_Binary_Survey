@@ -8,6 +8,6 @@ AFAB_Conf_Plot <- ggplot(AFAB_Conf_Sum, aes(x=reorder(row.names(AFAB_Conf_Sum), 
   geom_bar(stat = "identity", aes(fill= row.names(AFAB_Conf_Sum))) +
   theme(axis.text.x = element_blank(), legend.title = element_blank(), legend.position = "bottom")
 AFAB_Conf_Plotly <- ggplotly(AFAB_Conf_Plot, tooltip = "text") %>%
-  layout(legend = list(x=1, y = 1))
+  layout(showlegend = FALSE)
 
 withr::with_dir('./Output/', saveWidget(frameableWidget(AFAB_Conf_Plotly), "afab-conf.html"))

@@ -42,35 +42,36 @@ source("./scripts/create_AFAB_Inconf_Sum.R", local = knitr::knit_global(), encod
 La figure\@ref(fig:AFABConfPlot) montre les différentes réponses à la question des effets attendus d'une THS par les personnes non-binaires assignées femmes à la naissance. A l'heure actuelle, `r nrow(Survey_Data)` personnes ont répondu dont `r nrow(Survey_Data_AFAB)` (`r label_percent()((nrow(Survey_Data_AFAB)/nrow(Survey_Data)))`) personnes non-binaires assignées femmes à la naissance (AFAB) et `r nrow(Survey_Data_AMAB)` (`r label_percent()((nrow(Survey_Data_AMAB)/nrow(Survey_Data)))`) personnes non-binaires assignées hommes à la naissance (AMAB). 
 
 
-Test de références [zotpressInText item="{2008972:9U9PYSVI}" format="%num%"]
 
 
 
-<center>
 ```{r AFABConfPlot, echo=FALSE}
 
 source("./scripts/create_AFAB_Conf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-AFAB_Conf_Plotly
-
 ```
-</center>
 
 
 
 
 
-<center>
+
 ```{r AFABInconfPlot, fig.cap = "Effets indésirables d'une THS pour les personnes NB AFAB", echo=FALSE}
 
 source("./scripts/create_AFAB_Inconf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
-AFAB_Inconf_Plotly
+
 
 ```
-</center>
 
 
-<figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/afab-conf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
+
+
+
+  <figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/afab-conf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
+</div>
+
+
+  <figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/afab-inconf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
+
 
 
 ```{r eval=FALSE, include=FALSE}
@@ -78,6 +79,4 @@ AFAB_Inconf_Plotly
 source("./scripts/edit_WP_post.R", local = knitr::knit_global(), encoding = "UTF-8")
 ```
 
-## Bibliographie
 
-[zotpressInTextBib style="bmj" sort="ASC"]

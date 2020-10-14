@@ -9,6 +9,6 @@ AFAB_Inconf_Plot <- ggplot(AFAB_Inconf_Sum, aes(x=reorder(row.names(AFAB_Inconf_
   theme(axis.text.x = element_blank(), legend.title = element_blank())
 
 AFAB_Inconf_Plotly <- ggplotly(AFAB_Inconf_Plot, tooltip = "text") %>%
-  layout(legend = list(x=1, y = 1))
+  layout(showlegend = FALSE)
 
 withr::with_dir('./Output/', saveWidget(frameableWidget(AFAB_Inconf_Plotly), "afab-inconf.html"))

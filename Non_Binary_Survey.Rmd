@@ -91,6 +91,36 @@ source("./scripts/create_AMAB_Inconf_Plotly.R", local = knitr::knit_global(), en
 
 <br>
 
+```{r message=FALSE, warning=FALSE}
+
+# On commence par créer la liste des connexions pour le réseau AFAB
+source("./scripts/create_Edgelist_AFAB.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# Puis les noeuds pour le même réseau
+source("./scripts/create_AFAB_Nodes.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# On transforme la liste des connexions créée plus haut en une edgelist avec les ID des connexions et le poids de chaque ocnnexion
+source("./scripts/create_AFAB_Edges.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# Et maintenant on crée le graphique
+
+library(tidygraph)
+library(GGally)
+library(RColorBrewer)
+library(ggraph)
+AFAB_Network <- tbl_graph(nodes = AFAB_Nodes, edges = AFAB_Edges, directed = FALSE) %>%
+  mutate(Closeness = centrality_closeness(), Betweenness = centrality_betweenness(), Degree = centrality_degree(weight=weight))
+
+set.seed(3952)
+AFAB_Network_Plot <- ggnet2(AFAB_Network, mode = "fruchtermanreingold", node.size = "personnes", node.color = "category", palette = "Set2", edge.color = c("color", "lightgray"), edge.alpha = 0.5, label = "id", edge.size = AFAB_Edges$weight/50, text = paste( AFAB_Network$label)) +
+  ggtitle("Réseau des attentes et craintes liées au THS chez les personnes NB AFAB") 
+ggplotly(AFAB_Network_Plot) %>%
+  layout(showlegend = FALSE, xaxis = ax, yaxis = ax)
+
+
+
+```
+
 
 ```{r eval=FALSE, include=FALSE}
 

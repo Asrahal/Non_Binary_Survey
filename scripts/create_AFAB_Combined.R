@@ -1,0 +1,27 @@
+AFAB_Combined <- Survey_Data_AFAB %>%
+  transmute(Facial_Hair = ifelse(Facial_Hair_Inconf == 1, 1, 
+                                 ifelse(Facial_Hair_Conf == 0 & Facial_Hair_Inconf == 0, 2, 
+                                        ifelse(Facial_Hair_Conf == 1, 3, NA ))),
+            Body_Hair = ifelse(Body_Hair_Inconf == 1, 1,
+                               ifelse(Body_Hair_Conf == 0 & Body_Hair_Inconf == 0, 2, 
+                                      ifelse(Body_Hair_Conf == 1, 3, NA ))),
+            Dickclit = ifelse(Dickclit_Inconf == 1, 1, 
+                              ifelse(Dickclit_Conf == 0 & Dickclit_Inconf == 0, 2,
+                                     ifelse(Dickclit_Conf == 1, 3, NA ))),
+            Menses = ifelse(Menses_Inconf == 1, 1, 
+                            ifelse(Menses_Conf == 0 & Menses_Inconf == 0, 2,
+                                   ifelse(Menses_Conf == 1, 3, NA ))),
+            Voice = ifelse(Voice_Inconf == 1, 1, 
+                           ifelse(Voice_Conf == 0 & Voice_Inconf == 0, 2, 
+                                  ifelse(Voice_Conf == 1, 3, NA ))),
+            Fat = ifelse(Body_Fat_Inconf == 1, 1, 
+                         ifelse(Body_Fat_Conf == 0 & Body_Fat_Inconf == 0, 2, 
+                                ifelse(Body_Fat_Conf == 1, 3, NA ))),
+            Muscle = ifelse(Muscle_Inconf == 1, 1, 
+                            ifelse(Muscle_Conf == 0 & Muscle_Inconf == 0, 2, 
+                                   ifelse(Muscle_Conf == 1, 3, NA ))),
+            Alopecia = ifelse(Alopecia_Inconf == 1, 1, 
+                              ifelse(Alopecia_Conf == 0 & Alopecia_Inconf == 0, 2, 
+                                     ifelse(Alopecia_Conf == 1, 3, NA ))
+                              )
+  )

@@ -41,6 +41,16 @@ source("./scripts/create_AFAB_Inconf_Sum.R", local = knitr::knit_global(), encod
 source("./scripts/create_AMAB_Conf_Sum.R", local = knitr::knit_global(), encoding = "UTF-8")
 source("./scripts/create_AMAB_Inconf_Sum.R", local = knitr::knit_global(), encoding = "UTF-8")
 
+# On recode les données en 3 catégories : dysphorie, neutre et euphorie pour les personnes AFAB et AMAB
+source("./scripts/create_AFAB_Combined.R", local = knitr::knit_global(), encoding = "UTF-8")
+source("./scripts/create_AMAB_Combined.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+# Et on crée les fréquences et pourcentages pour ces scores recodés
+source("./scripts/create_AFAB_Comb_Sum.R", local = knitr::knit_global(), encoding = "UTF-8")
+source("./scripts/create_AMAB_Comb_Sum.R", local = knitr::knit_global(), encoding = "UTF-8")
+
+
+
 
 
 ```
@@ -49,238 +59,10 @@ source("./scripts/create_AMAB_Inconf_Sum.R", local = knitr::knit_global(), encod
 A l'heure actuelle, `r nrow(Survey_Data)` personnes ont répondu dont `r nrow(Survey_Data_AFAB)` (`r label_percent()((nrow(Survey_Data_AFAB)/nrow(Survey_Data)))`) personnes non-binaires assignées femmes à la naissance (AFAB) et `r nrow(Survey_Data_AMAB)` (`r label_percent()((nrow(Survey_Data_AMAB)/nrow(Survey_Data)))`) personnes non-binaires assignées hommes à la naissance (AMAB). 
 
 
-```{r AFABConfPlot, echo=FALSE}
-
-source("./scripts/create_AFAB_Conf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
-```
-
-  <figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/afab-conf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
-
-<br>
-
-```{r AFABInconfPlot, fig.cap = "Effets indésirables d'une THS pour les personnes NB AFAB", echo=FALSE}
-
-source("./scripts/create_AFAB_Inconf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-
-```
-
-
-  <figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/afab-inconf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
-
-<br>
-
-```{r AMABConfPlot, fig.cap = "Effets attendus d'une THS pour les personnes NB AMAB", echo=FALSE}
-
-source("./scripts/create_AMAB_Conf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-
-```
-
-<figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/amab-conf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
-
-<br>
-
-```{r AMABInconfPlot, fig.cap = "Effets indésirables d'une THS pour les personnes NB AMAB", echo=FALSE}
-
-source("./scripts/create_AMAB_Inconf_Plotly.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-
-```
-
-<figure><iframe src= "https://asrahal.github.io/Non_Binary_Survey/output/amab-inconf.html" width="100%" height="600" <="" iframe"=""></iframe></figure>
-
-<br>
-
-```{r message=FALSE, warning=FALSE}
-
-# On commence par créer la liste des connexions pour le réseau AFAB
-source("./scripts/create_Edgelist_AFAB.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-# Puis les noeuds pour le même réseau
-source("./scripts/create_AFAB_Nodes.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-# On transforme la liste des connexions créée plus haut en une edgelist avec les ID des connexions et le poids de chaque ocnnexion
-source("./scripts/create_AFAB_Edges.R", local = knitr::knit_global(), encoding = "UTF-8")
-
-# Et maintenant on crée le graphique
-
-library(tidygraph)
-library(GGally)
-library(RColorBrewer)
-library(ggraph)
-library(plotly)
-AFAB_Network <- tbl_graph(nodes = AFAB_Nodes, edges = AFAB_Edges, directed = FALSE) %>%
-  mutate(Closeness = centrality_closeness(), Betweenness = centrality_betweenness(), Degree = centrality_degree(weight=weight))
-
-set.seed(3952)
-AFAB_Network_Plot <- ggnet2(AFAB_Network, mode = "fruchtermanreingold", node.size = "personnes", node.color = "category", palette = "Set2", edge.color = c("color", "lightgray"), edge.alpha = 0.5, label = "id", edge.size = AFAB_Edges$weight/50, text = paste( AFAB_Network$label)) +
-  ggtitle("Réseau des attentes et craintes liées au THS chez les personnes NB AFAB") 
-ggplotly(AFAB_Network_Plot) %>%
-  layout(showlegend = FALSE)
-
-
-
-```
-
-
-La centralité des noeuds doit être évaluée très prudemment car les indices de centralité ne sont pas stables. Au niveau des relations, les seules différences significatives sont entre le lien entre la pilosité corporelle et la pilosité faciale et les liens entre la pilosité faciale et les muscles, la pilosité faciale et le dickclit et la voix et la graisse. Les seuls noeuds qui diffèrent de manière statistiquement significative sont la voix et la pilosité corporelle
-
-```{r}
-library(IsingFit)
-library(tidyverse)
-library(bootnet)
-library(qgraph)
-library(igraph)
-library(lavaan)
-
-# Recoder les variables AFAB afin d'en faire des variables ordinales 
-
-AFAB_Combined <- Survey_Data_AFAB %>%
-  transmute(Facial_Hair = ifelse(Facial_Hair_Inconf == 1, 1, ifelse(Facial_Hair_Conf == 0 & Facial_Hair_Inconf == 0, 2, ifelse(Facial_Hair_Conf == 1, 3, NA ))),
-         Body_Hair = ifelse(Body_Hair_Inconf == 1, 1, ifelse(Body_Hair_Conf == 0 & Body_Hair_Inconf == 0, 2, ifelse(Body_Hair_Conf == 1, 3, NA ))),
-         Dickclit = ifelse(Dickclit_Inconf == 1, 1, ifelse(Dickclit_Conf == 0 & Dickclit_Inconf == 0, 2, ifelse(Dickclit_Conf == 1, 3, NA ))),
-         Menses = ifelse(Menses_Inconf == 1, 1, ifelse(Menses_Conf == 0 & Menses_Inconf == 0, 2, ifelse(Menses_Conf == 1, 3, NA ))),
-         Voice = ifelse(Voice_Inconf == 1, 1, ifelse(Voice_Conf == 0 & Voice_Inconf == 0, 2, ifelse(Voice_Conf == 1, 3, NA ))),
-         Fat = ifelse(Body_Fat_Inconf == 1, 1, ifelse(Body_Fat_Conf == 0 & Body_Fat_Inconf == 0, 2, ifelse(Body_Fat_Conf == 1, 3, NA ))),
-         Muscle = ifelse(Muscle_Inconf == 1, 1, ifelse(Muscle_Conf == 0 & Muscle_Inconf == 0, 2, ifelse(Muscle_Conf == 1, 3, NA ))),
-         Alopecia = ifelse(Alopecia_Inconf == 1, 1, ifelse(Alopecia_Conf == 0 & Alopecia_Inconf == 0, 2, ifelse(Alopecia_Conf == 1, 3, NA )))
-         ) %>%   dplyr::select(- Menses, - Alopecia)
-
-
-
-AFAB_Network <- estimateNetwork(AFAB_Combined, default = "EBICglasso", corMethod = "cor_auto", tuning = 0.5, threshold = TRUE)
-AFAB_boot1 <- bootnet(AFAB_Network, type = "nonparametric", nBoots = 1000, nCores = 4)
-AFAB_Boot2 <- bootnet(AFAB_Network, type = "case", nBoots = 1000, nCores = 4)
-corStability(AFAB_Boot2, cor = 0.7, statistics = "all")
-
-plot(AFAB_Network, layout = "spring")
-centralityPlot(AFAB_Network, include = c("Strength", "Betweenness", "Closeness"))
-plot(AFAB_boot1, order = "sample")
-plot(AFAB_Boot2)
-plot(AFAB_boot1, "edge", plot = "difference", onlyNonZero = TRUE, order = "sample")
-plot(AFAB_boot1, "strength")
-
-
-AMAB_Combined <- Survey_Data_AMAB %>%
-  transmute(Breast = ifelse(Breast_Inconf == 1, 1, ifelse(Breast_Conf == 0 & Breast_Inconf == 0, 2, ifelse(Breast_Conf == 1, 3, NA ))),
-            Skin = ifelse(Skin_Inconf == 1, 1, ifelse(Skin_Conf == 0 & Skin_Inconf == 0, 2, ifelse(Skin_Conf == 1, 3, NA ))),
-            Erection = ifelse(Erection_Inconf == 1, 1, ifelse(Erection_Conf == 0 & Erection_Inconf == 0, 2, ifelse(Erection_Conf == 1, 3, NA ))),
-            Testes = ifelse(Testes_Inconf == 1, 1, ifelse(Testes_Conf == 0 & Testes_Inconf == 0, 2, ifelse(Testes_Conf == 1, 3, NA ))),
-            Fat = ifelse(Body_Fat_Inconf == 1, 1, ifelse(Body_Fat_Conf == 0 & Body_Fat_Inconf == 0, 2, ifelse(Body_Fat_Conf == 1, 3, NA ))),
-            Facial_Hair = ifelse(Facial_Hair_Inconf == 1, 1, ifelse(Facial_Hair_Conf == 0 & Facial_Hair_Inconf == 0, 2, ifelse(Facial_Hair_Conf == 1, 3, NA ))),
-            Body_Hair = ifelse(Body_Hair_Inconf == 1, 1, ifelse(Body_Hair_Conf == 0 & Body_Hair_Inconf == 0, 2, ifelse(Body_Hair_Conf == 1, 3, NA ))),
-            Muscle = ifelse(Muscle_Inconf == 1, 1, ifelse(Muscle_Conf == 0 & Muscle_Inconf == 0, 2, ifelse(Muscle_Conf == 1, 3, NA ))))
-
-AMAB_Combined2 <- Survey_Data_AMAB %>%
-  transmute(Breast = ifelse(Breast_Inconf == 1, 1, ifelse(Breast_Conf == 0 & Breast_Inconf == 0, 2, ifelse(Breast_Conf == 1, 3, NA ))),
-            Erection = ifelse(Erection_Inconf == 1, 1, ifelse(Erection_Conf == 0 & Erection_Inconf == 0, 2, ifelse(Erection_Conf == 1, 3, NA ))),
-            Testes = ifelse(Testes_Inconf == 1, 1, ifelse(Testes_Conf == 0 & Testes_Inconf == 0, 2, ifelse(Testes_Conf == 1, 3, NA ))),
-            Fat = ifelse(Body_Fat_Inconf == 1, 1, ifelse(Body_Fat_Conf == 0 & Body_Fat_Inconf == 0, 2, ifelse(Body_Fat_Conf == 1, 3, NA ))),
-            Hair = ifelse(Facial_Hair_Inconf == 1 | Body_Hair_Inconf == 1, 1, ifelse(Facial_Hair_Conf == 0 & Facial_Hair_Inconf == 0 | Body_Hair_Conf == 0 & Body_Hair_Inconf == 0, 2, ifelse(Facial_Hair_Conf == 1 | Body_Hair_Conf == 1, 3, NA ))),
-            Muscle = ifelse(Muscle_Inconf == 1, 1, ifelse(Muscle_Conf == 0 & Muscle_Inconf == 0, 2, ifelse(Muscle_Conf == 1, 3, NA ))),
-            Skin = ifelse(Skin_Inconf == 1, 1, ifelse(Skin_Conf == 0 & Skin_Inconf == 0, 2, ifelse(Skin_Conf == 1, 3, NA ))))
-
-AMAB_Network <- estimateNetwork(AMAB_Combined, default = "EBICglasso", corMethod = "cor_auto", threshold = TRUE, tuning = 0.5)
-plot(AMAB_Network, layout = "spring")
-
-
-library(corrplot)
-AMAB_p <- cor.mtest(AMAB_Combined)
-AMAB_Cor <- cor(AMAB_Combined)
-corrplot(AMAB_Cor, method = "square", p.mat = AMAB_p$p, insig = "blank")
-
-AFAB_p <- cor.mtest(AFAB_Combined)
-AFAB_Cor <- cor(AFAB_Combined)
-corrplot(AFAB_Cor, method = "number", p.mat = AFAB_p$p, insig = "blank")
-
-```
-
-
-```{r}
-library(mgm)
-library(qgraph)
-set.seed(1)
-
-
-
-AFAB_network <- mgm(AFAB_Combined, type = c("c", "c", "c",  "c", "c", "c", "c", "c"), levels = c(3, 3, 3, 3, 3, 3, 3, 3), k = 2, binarySign = TRUE, lambdaSel = "EBIC", lambdaGam = 0.25)
-
-pred_AFAB  <- predict(object = AFAB_network, data = AFAB_Combined, errorCon = c("R2"), errorCat = c("CC", "nCC","CCmarg"))
-
-error_list <- list() 
-for(i in 1:8) error_list [[i]] <- c(pred_AFAB$errors[i, 5], pred_AFAB$errors[i, 3] - pred_AFAB$errors[i, 5])
-
-color_list <- list()
-for(i in 1:8) color_list[[i]] <- c("#ffa500", "#ff4300")
-
-qgraph(AFAB_network$pairwise$wadj,
-        layout = "spring",
-        pie = error_list,
-        pieColor = color_list,
-        legend.mode="style1", legend.cex=1)
-
-
-
-
-```
-
-```{r}
-
-library(psych)
-library(GPArotation)
-fa.parallel(AFAB_Combined, fm = "minres", fa = "fa")
-AFAB_2F <- 
-fa(AFAB_Cor, nfactors = 2, rotate = "oblimin", fm="minres")
-
-```
 
 
 
 ```{r}
-library(poLCA)
-AFAB_LCA_Formula <- cbind(Facial_Hair, Body_Hair, Dickclit, Fat, Muscle, Menses, Voice, Alopecia) ~ 1 
-AFAB_Combined1 <- AFAB_Combined %>%
-  dplyr::select(-Menses, -Voice, -Alopecia)
-AFAB_LCA <- poLCA(AFAB_LCA_Formula, data = AFAB_Combined, nclass = 2, graphs = TRUE, maxiter = 1000, nrep = 30)
-
-
-AFAB_LCA_Formula1 <- cbind(Facial_Hair, Body_Hair, Dickclit, Menses, Voice, Fat, Muscle) ~ 1 
-AFAB_Combined1 <- AFAB_Combined %>%
-  dplyr::select(-Alopecia)
-
-AFAB_LCA1 <- poLCA(AFAB_LCA_Formula1, data = AFAB_Combined1, nclass = 2, graphs = TRUE, maxiter = 1000, nrep = 100)
-
-AFAB_LCA_Formula2 <- cbind(Facial_Hair, Body_Hair, Dickclit, Voice, Fat, Muscle) ~ 1 
-AFAB_Combined2 <- AFAB_Combined %>%
-  dplyr::select(-Alopecia, -Menses)
-
-AFAB_LCA2 <- poLCA(AFAB_LCA_Formula2, data = AFAB_Combined2, nclass = 2, graphs = TRUE, maxiter = 1000, nrep = 100)
-
-
-
-for (i in 2:4) {
-  max_ll <- -100000
-  min_bic <- 3985.351
-  for (j in 1:100) {
-    res <- poLCA(AFAB_LCA_Formula, data = AFAB_Combined, nclass = i, maxiter = 500, tol = 1e-5)
-    if(res$bic < min_bic) {
-      min_bic <- res$bic
-      LCA_best_model <- res
-    }
-  }
-}
-LCA_best_model
-plot(LCA_best_model)
-
-plot(AFAB_LCA)
-plot(AMAB_LCA)
-
-AMAB_Combined1 <- AMAB_Combined2 %>%
-  dplyr::select(-Skin, - Muscle)
-
-AMAB_LCA_Formula <- cbind(Breast, Erection, Testes, Fat, Hair) ~ 1
-AMAB_LCA <- poLCA(AMAB_LCA_Formula, AMAB_Combined1, nclass = 4, graphs = TRUE, nrep = 30, maxiter = 3000)
 
 library(plyr)
 AFAB_possibilities <- ddply(AFAB_Combined, colnames(AFAB_Combined), nrow)
@@ -293,61 +75,9 @@ AMAB_possibilities <- ddply(AMAB_Combined, colnames(AMAB_Combined), nrow)
 
 
 
-```{r}
-library(poLCA)
-
-AFAB_LCA_formula <- cbind(Facial_Hair_Conf, Body_Hair_Conf, Dickclit_Conf, Menses_Conf, Voice_Conf, Body_Fat_Conf, Muscle_Conf, Alopecia_Conf, Facial_Hair_Inconf, Body_Hair_Inconf, Dickclit_Inconf, Menses_Inconf, Voice_Inconf, Voice_Too_Deep, Body_Fat_Inconf, Muscle_Inconf, Alopecia_Inconf) ~ 1 
-
-AFAB_LCA <- Survey_Data_AFAB + 1
-Model_1 <- poLCA(AFAB_LCA_formula, data = AFAB_LCA, nclass = 2, graphs = TRUE)
-
-AFAB_LCA_formula2 <- cbind(Facial_Hair_Conf, Body_Hair_Conf, Dickclit_Conf, Menses_Conf, Voice_Conf, Body_Fat_Conf, Muscle_Conf, Facial_Hair_Inconf, Body_Hair_Inconf, Dickclit_Inconf, Voice_Inconf, Voice_Too_Deep, Body_Fat_Inconf, Muscle_Inconf) ~ 1 
-
-Model_1 <- poLCA(AFAB_LCA_formula2, data = AFAB_LCA, nclass = 2, graphs = TRUE)
-Model_2 <- poLCA(AFAB_LCA_formula2, data = AFAB_LCA, nclass = 3, graphs = TRUE)
-
-
-AFAB_LCA_formula3 <- cbind(Facial_Hair_Conf, Body_Hair_Conf, Dickclit_Conf, Menses_Conf, Voice_Conf, Body_Fat_Conf, Muscle_Conf, Alopecia_Conf) ~ 1 
-
-Model_1 <- poLCA(AFAB_LCA_formula3, data = AFAB_LCA, nclass = 2, graphs = TRUE)
-Model_2 <- poLCA(AFAB_LCA_formula3, data = AFAB_LCA, nclass = 3, graphs = TRUE)
-
-for (i in 2:2) {
-  max_ll <- -100000
-  min_bic <- 2130
-  for (j in 1:100) {
-    res <- poLCA(AFAB_LCA_formula3, data = AFAB_LCA, nclass = i, maxiter = 500, tol = 1e-5)
-    if(res$bic < min_bic) {
-      min_bic <- res$bic
-      LCA_best_model <- res
-    }
-  }
-}
-
-for (i in 2:2) {
-  max_ll <- -100000
-  min_bic <- 3941
-  for (j in 1:100) {
-    resfull <- poLCA(AFAB_LCA_formula, data = AFAB_LCA, nclass = i, maxiter = 500, tol = 1e-5, graphs = TRUE)
-    if(resfull$bic < min_bic) {
-      min_bic <- resfull$bic
-      LCA_best_model_full <- resfull
-    }
-  }
-}
 
 
 
-```
 
-
-En pratique, on peut observer une corrélation entre les besoins de pilosité faciale, de pilosité corporelle et de pousse du dickclit. Cette corrélation se retrouve dans l'analyse en réseau ainsi que dans une analyse de corrélation classique. 
-Une analyse de classe latente montre qu'il existe deux profils distincts, un premier, majoritaire (74%) caractérisé par des besoins moindres en pilosité corporelle, faciale et dickclit mais des besoins comparables en termes d'arrêt des règles, d'aggravation de la voix, de répartition masculine des graisses et de majoration de la musculature. 
-
-
-```{r eval=FALSE, include=FALSE}
-
-source("./scripts/edit_WP_post.R", local = knitr::knit_global(), encoding = "UTF-8")
-```
 
 

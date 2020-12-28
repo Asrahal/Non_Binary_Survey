@@ -12,11 +12,12 @@ AFAB_Waffle1 <- waffle(AFAB_Comb_Sum[1, 4:6]*100,
        ) +
   theme(plot.title = element_text(hjust = 0.5, size = 10)) +
   scale_fill_manual(name = NULL, 
-                    values = c("#ed7b84", "#FADF75","#5bc2a3"), 
+                    values = c("#ed7b84", "#FADF75","#5bc2a3", "#5bc2a3"), 
                     labels = c(paste(AFAB_Comb_Sum[1,4]*100, "%"), 
                                paste(AFAB_Comb_Sum[1,5]*100, "%"),
-                               paste(AFAB_Comb_Sum[1,6]*100, "%"))
-                    )
+                               paste(AFAB_Comb_Sum[1,6]*100, "%")),
+                    breaks= colnames(AFAB_Comb_Sum[4:6])
+  )
                     
 AFAB_Waffle2 <- waffle(AFAB_Comb_Sum[2, 4:6]*100, 
                        rows=10, 
@@ -95,10 +96,11 @@ AFAB_Waffle6 <- waffle(AFAB_Comb_Sum[6, 4:6]*100,
 ) +
   theme(plot.title = element_text(hjust = 0.5, size = 10)) +
   scale_fill_manual(name = NULL, 
-                    values = c("#ed7b84", "#FADF75","#5bc2a3"), 
+                    values = c("#ed7b84", "#FADF75","#5bc2a3", "#5bc2a3"), 
                     labels = c(paste(AFAB_Comb_Sum[6,4]*100, "%"), 
                                paste(AFAB_Comb_Sum[6,5]*100, "%"),
-                               paste(AFAB_Comb_Sum[6,6]*100, "%"))
+                               paste(AFAB_Comb_Sum[6,6]*100, "%")),
+                    breaks= colnames(AFAB_Comb_Sum[4:6])
   )
 
 AFAB_Waffle7 <- waffle(AFAB_Comb_Sum[7, 4:6]*100, 

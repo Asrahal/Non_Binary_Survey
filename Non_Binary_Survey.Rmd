@@ -56,21 +56,80 @@ source("./scripts/create_AMAB_Comb_Sum.R", local = knitr::knit_global(), encodin
 ```
 
 
-A l'heure actuelle, `r nrow(Survey_Data)` personnes ont répondu dont `r nrow(Survey_Data_AFAB)` (`r label_percent()((nrow(Survey_Data_AFAB)/nrow(Survey_Data)))`) personnes non-binaires assignées femmes à la naissance (AFAB) et `r nrow(Survey_Data_AMAB)` (`r label_percent()((nrow(Survey_Data_AMAB)/nrow(Survey_Data)))`) personnes non-binaires assignées hommes à la naissance (AMAB). 
+
+
+# Introdution 
+Une personne non-binaire est une personne dont l'identité de genre n'est ni (entièrement) féminine ni (entièrement) masculine. Il s'agit d'un terme-parapluie regroupant une grande variété d'identités différentes. Certaines personnes non-binaires se définissent en-dehors du masculin et du féminin, d'autres oscillent quelque part entre les deux sans s'identifier complètement à l'un de ces deux genres. En outre, l'identification peut varier en fonction du temps. 
+
+Pour une partie des personnes non-binaires, la transition hormonale peut s'avérer nécessaire afin de se rapprocher de son point de confort. Or, malheureusement, les protocoles médicaux sont très formatés et mal-adaptés à la variabilité importante des parcours que l'on retrouve chez les personnes transgenres, non-binaires ou non. 
+
+Face à ce manque d'information, les personnes concernées s'organisent souvent entre elleux pour s'échanger des conseils ou des connaissances. Malheureusement, peu de ressources adressant spécifiquement la transition hormonale des personnes non-binaires existent, que ce soit dans la littérature scientifique ou sur internet en général. 
+
+L'idée de créer cet article est donc venue après discussion avec des personnes non-binaires sur Twitter. L'objectif est de mieux comprendre les besoins de transition hormonale des personnes non-binaires afin de proposer dans un second temps un article qui résume les pistes envisageables. 
+
+
+# Méthode 
+## Réalisation du questionnaire
+Pour ce faire, j'ai réalisé un questionnaire assez simple qui résume les principaux effets des thérapies hormonales de substitution (THS) sur l'apparence physique afin de voir dans quelle mesure ces effets étaient désirés ou redoutés. Pour les personnes assignées femmes à la naissance (AFAB), l'objectif de la THS est d'obtenir une apparence physique perçue comme plus masculine dans nos sociétés. Parmi les effets de ces THS, ceux-ci ont été retenus dans le questionnaire : 
+* Une pilosité faciale et corporelle accrue
+* Une répartition plus masculine des graisses
+* Une musculature plus développée 
+* Une aggravation de la voix 
+* Une majoration de la taille du clitoris, qui est souvent appelé "dickclit"
+* Un arrêt des règles
+* Une calvitie assez typique liée à l'effet des hormones, qui touche principalement les tempes et le sommet du crâne et que l'on appelle "alopécie androgénétique" 
+
+Certains effets de la THS n'ont pas été mentionnés dans le questionnaire car ils sont généralement perçus comme indésirables (p. ex. l'acné) ou sans influence sur le physique (p. ex. la tension artérielle qui a tendance à augmenter). 
+
+Pour les personnes assignées hommes à la naissance (AMAB), les différents effets ont été retenus dans le questionnaire : 
+* Une pilosité faciale et corporelle moindre
+* Une réparition plus féminine des graisses
+* Une musculature moins développée 
+* Une augmentation de la taille des seins
+* Une peau plus souple et moins grasse
+* Une diminution des érections
+* Une diminution du volume testiculaire
+
+Le questionnaire se composait de 3 questions : 
+* L'assignation de genre à la naissance (AFAB ou AMAB)
+* Les effets désirés pour se rapprocher du point de confort parmi ceux cités plus haut
+* Les effets qui risquaient d'éloigner du point de confort parmi ceux cités plus haut
+
+Chaque effet de la THS a ensuite été divisé en 3 catégories selon les réponses : 
+* Désirable, s'il permettait de se rapprochait du point de confort
+* Indésirable, s'il risquait de s'en éloigner 
+* Neutre, s'il n'avait pas d'influence
+
+Ce questionnaire a circulé pendant plus de 4 mois, de août à décembre 2020 et a majoritairement été partagé sur Facebook et Twitter. 
+
+## Analyse des données
+Afin que les données récoltées soient les plus utiles possibles, elles ont été analysées en 3 étapes : 
+1) En premier lieu, une approche purement descriptive afin de déterminer la fréquence des réponses (p.ex. le pourcentage de personnes non-binaires AFAB qui désirent plus de pilosité faciale avec une THS)
+2) Une analyse des corrélations L'idée est de voir s'il existe un lien entre les différentes réponses. Par exemple, si les personnes non-binaires AMAB qui désirent avoir moins de muscle désirent aussi avoir moins de pilosité ou si les deux sont indépendants. 
+3) Une analyse de classe latente. Il s'agit d'une méthode statistique qui permet de voir s'il existe des sous-groupes de personnes qui répondent de la même manière. Par exemple, s'il y a un groupe qui veut surtout un effet sur les seins et les muscles et un autre, sur les poils et les graisses. L'objectif, en faisant cette analyse est de permettre, dans la mesure de possible, de proposer des pistes de THS adaptées aux besoins des sous-groupes qui seraient identifiés.
+
+# Résultats
+
+Au moment d'écrire cet article, `r nrow(Survey_Data)` personnes ont répondu dont `r nrow(Survey_Data_AFAB)` (`r label_percent()((nrow(Survey_Data_AFAB)/nrow(Survey_Data)))`) personnes non-binaires AFAB et `r nrow(Survey_Data_AMAB)` (`r label_percent()((nrow(Survey_Data_AMAB)/nrow(Survey_Data)))`) personnes AMAB. Cette différence de représentation selon l'assignation à la naissance pourrait en partie s'expliquer par la dissémination du questionnaire. En effet, celui-ci a été, à ma connaissance, davantage partagé sur des groupes dédiés aux personnes transmasculines. Ce faisant, il est probable que davantage de personnes non-binaires AFAB aient lu le questionnaire et décidé d'y répondre. 
+
+## Point de confort des personnes non-binaires AFAB 
 
 
 
-
-
-```{r}
-
-library(plyr)
-AFAB_possibilities <- ddply(AFAB_Combined, colnames(AFAB_Combined), nrow)
-Hair_P <- ddply(AFAB_Combined, c("Facial_Hair", "Body_Hair"), nrow)
-Silhouette_P <- ddply(AFAB_Combined, c("Muscle", "Fat"), nrow)
-AMAB_possibilities <- ddply(AMAB_Combined, colnames(AMAB_Combined), nrow)
-
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+source("./scripts/create_AFAB_Table.R", local = knitr::knit_global(), encoding = "UTF-8")
+AFAB_Table
 ```
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+source("./scripts/create_AFAB_Waffle.R", local = knitr::knit_global(), encoding = "UTF-8")
+```
+
+
+
 
 
 

@@ -19,7 +19,7 @@ AFAB_Comb_Sum <- data.frame(Freq.Dysphorie = unlist(AFAB_dysphorie),
                                       digits = 2),
                 Pct.Euphorie = round((Freq.Euphorie/nrow(AFAB_Combined)), 
                                       digits = 2)
-                )
+                ) 
 
 row.names(AFAB_Comb_Sum) <- c("Pilosité faciale accrue", 
                               "Pilosité corporelle accrue", 
@@ -28,4 +28,4 @@ row.names(AFAB_Comb_Sum) <- c("Pilosité faciale accrue",
                               "Aggravation de la voix", 
                               "Répartition masculine des graisses", 
                               "Majoration de la musculature", 
-                              "Alopécie androgénique")
+                              "Alopécie androgénétique")

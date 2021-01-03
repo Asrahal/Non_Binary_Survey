@@ -14,6 +14,8 @@ colnames(AMAB_Combined2) <- c("Seins",
 AMAB_Kendall <- corr.test(AMAB_Combined2, 
                           method = "kendall", 
                           use = "pairwise")
+
+png(height=900, width=900, file="./plots/AMAB_Corrplot.png", type = "cairo")
 corrplot(AMAB_Kendall$r,
          method = "color",
          type="upper", 
@@ -23,6 +25,7 @@ corrplot(AMAB_Kendall$r,
          p.mat = AMAB_Kendall$p,
          insig = "blank"
 )
+dev.off()
 
 
 

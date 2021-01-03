@@ -21,7 +21,7 @@ AMAB_Comb_Sum <- data.frame(Freq.Dysphorie = unlist(AMAB_dysphorie),
                                      digits = 2)
   )
 
-row.names(AMAB_Comb_Sum) <- c("Augmentation de la taille des seins", 
+AMAB_Comb_Sum$Effet <- c("Augmentation de la taille des seins", 
                               "Peau plus souple et moins grasse", 
                               "Diminution des érections", 
                               "Diminution du volume testiculaire", 
@@ -29,3 +29,6 @@ row.names(AMAB_Comb_Sum) <- c("Augmentation de la taille des seins",
                               "Diminution de la pilosité faciale", 
                               "Diminution de la pilosité corporelle", 
                               "Diminution de la masse musculaire")
+
+AMAB_Comb_Sum <- AMAB_Comb_Sum %>%
+  relocate(Effet, .before = Freq.Dysphorie)

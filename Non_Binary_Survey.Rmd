@@ -59,9 +59,9 @@ source("./scripts/create_AMAB_Comb_Sum.R", local = knitr::knit_global(), encodin
 
 
 # Introdution 
-Une personne non-binaire est une personne dont l'identité de genre n'est ni (entièrement) féminine ni (entièrement) masculine. Il s'agit d'un terme-parapluie regroupant une grande variété d'identités différentes. Certaines personnes non-binaires se définissent en-dehors du masculin et du féminin, d'autres oscillent quelque part entre les deux sans s'identifier complètement à l'un de ces deux genres. En outre, l'identification peut varier en fonction du temps. 
+Une personne non-binaire est une personne dont l'identité de genre n'est ni (entièrement) femme ni (entièrement) homme. Il s'agit d'un terme-parapluie regroupant une grande variété d'identités différentes. Certaines personnes non-binaires se définissent en-dehors du masculin et du féminin, d'autres oscillent quelque part entre les deux sans s'identifier complètement à l'un de ces deux genres. En outre, l'identification peut varier en fonction du temps. 
 
-Pour une partie des personnes non-binaires, la transition hormonale peut s'avérer nécessaire afin de se rapprocher de son point de confort. Or, malheureusement, les protocoles médicaux sont très formatés et mal-adaptés à la variabilité importante des parcours que l'on retrouve chez les personnes transgenres, non-binaires ou non. 
+Pour une partie des personnes non-binaires, la transition hormonale peut s'avérer nécessaire afin de se rapprocher de son point de confort. Or, malheureusement, les protocoles médicaux sont très formatés et mal-adaptés à la variabilité importante des parcours que l'on retrouve chez les personnes trans*, non-binaires ou non. 
 
 Face à ce manque d'information, les personnes concernées s'organisent souvent entre elleux pour s'échanger des conseils ou des connaissances. Malheureusement, peu de ressources adressant spécifiquement la transition hormonale des personnes non-binaires existent, que ce soit dans la littérature scientifique ou sur internet en général. 
 
@@ -71,13 +71,13 @@ L'idée de créer cet article est donc venue après discussion avec des personne
 # Méthode 
 ## Réalisation du questionnaire
 Pour ce faire, j'ai réalisé un questionnaire assez simple qui résume les principaux effets des thérapies hormonales de substitution (THS) sur l'apparence physique afin de voir dans quelle mesure ces effets étaient désirés ou redoutés. Pour les personnes assignées femmes à la naissance (AFAB), l'objectif de la THS est d'obtenir une apparence physique perçue comme plus masculine dans nos sociétés. Parmi les effets de ces THS, ceux-ci ont été retenus dans le questionnaire : 
-* Une pilosité faciale et corporelle accrue
-* Une répartition plus masculine des graisses
-* Une musculature plus développée 
-* Une aggravation de la voix 
-* Une majoration de la taille du clitoris, qui est souvent appelé "dickclit"
-* Un arrêt des règles
-* Une calvitie assez typique liée à l'effet des hormones, qui touche principalement les tempes et le sommet du crâne et que l'on appelle "alopécie androgénétique" 
+* Une pilosité faciale et corporelle accrue  
+* Une répartition plus masculine des graisses  
+* Une musculature plus développée   
+* Une aggravation de la voix   
+* Une majoration de la taille du clitoris, qui est souvent appelé "dickclit"  
+* Un arrêt des règles  
+* Une calvitie assez typique liée à l'effet des hormones, qui touche principalement les tempes et le sommet du crâne et que l'on appelle "alopécie androgénétique"   
 
 Certains effets de la THS n'ont pas été mentionnés dans le questionnaire car ils sont généralement perçus comme indésirables (p. ex. l'acné) ou sans influence sur le physique (p. ex. la tension artérielle qui a tendance à augmenter). 
 
@@ -113,7 +113,9 @@ Afin que les données récoltées soient les plus utiles possibles, elles ont é
 Au moment d'écrire cet article, `r nrow(Survey_Data)` personnes ont répondu dont `r nrow(Survey_Data_AFAB)` (`r label_percent()((nrow(Survey_Data_AFAB)/nrow(Survey_Data)))`) personnes non-binaires AFAB et `r nrow(Survey_Data_AMAB)` (`r label_percent()((nrow(Survey_Data_AMAB)/nrow(Survey_Data)))`) personnes AMAB. Cette différence de représentation selon l'assignation à la naissance pourrait en partie s'expliquer par la dissémination du questionnaire. En effet, celui-ci a été, à ma connaissance, davantage partagé sur des groupes dédiés aux personnes transmasculines. Ce faisant, il est probable que davantage de personnes non-binaires AFAB aient lu le questionnaire et décidé d'y répondre. 
 
 ## Point de confort des personnes non-binaires AFAB 
+### Réponses du questionnaire
 
+Le tableau 1 permet de visualiser les réponses concernant l'importance des différents effets de la THS pour le point de confort des personnes non-binaires AFAB. 
 
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -121,22 +123,99 @@ source("./scripts/create_AFAB_Table.R", local = knitr::knit_global(), encoding =
 AFAB_Table
 ```
 
+On peut voir que les effets les plus fréquemment désirés sont, dans l'ordre, l'aggravation de la voix, une répartition plus masculine des graisses, un arrêt des règles ainsi qu'une majoration de la musculature. Ces effets font la quasi-unanimité dans la mesure où moins de 10% des répondant‧e‧s s'éloigneraient de leur point de confort avec l'un de ces effets de la THS. 
+La pilosité faciale et la majoration de la taille du dickclit ne sont désirés que par environ 1/3 des répondant‧e‧s et pourraient provoquer de la dysphorie chez `r label_percent() (AFAB_Comb_Sum$Pct.Dysphorie[1]) ` et `r label_percent() (AFAB_Comb_Sum$Pct.Dysphorie[3]) ` des répondant‧e‧s respectivement. La pilosité corporelle, de son côté, n'est désirée que par une personne sur 5 et pourrait provoquer de la dysphorie chez près d'une personne sur deux. 
+Enfin, l'alopécie androgénétique est indésirable pour la quasi-totalité des personnes sondées. 
 
-
+La figure 1 permet de visualiser les données sus-citées sous une forme plus visuelle : 
 
 ```{r message=FALSE, warning=FALSE}
 source("./scripts/create_AFAB_Waffle.R", local = knitr::knit_global(), encoding = "UTF-8")
+AFAB_Waffle
 ```
 
 
+### Corrélations entre les réponses
+
+L'étape suivante consistait à regarder s'il y avait une corrélation entre les réponses à savoir si une personne qui désirait un effet avait plus de chance d'en désirer un autre. La figure 2 montre le résultat d'une analyse de corrélation sur le questionnaire : 
+
+```{r message=FALSE, warning=FALSE}
+source("./scripts/create_AFAB_Corrplot.R", local = knitr::knit_global(), encoding = "UTF-8")
+```
+
+
+Lorsque le carré est entièrement blanc, il n'y a pas de lien statistiquement significatif entre les deux réponses. Plus le carré est foncé et plus le lien est fort. 
+On remarque assez vite que la majorité des réponses ne sont pas liées du tout et que les quelques corrélations sont très faibles. La corrélation la plus forte est entre la pilosité corporelle et la pilosité faciale, ce qui montre que les personnes qui désirent plus de barbe ont aussi tendance à vouloir plus de poils sur le corps. Cependant, même cette corrélation reste très faible. En d'autres termes, il existe une forte diversité dans les réponses et, si l'on s'occupe de personnes non-binaires en tant que professionnel‧le de la santé, il est important de prendre le temps d'écouter la personne en face de soi pour savoir ce qu'iel désire exactement. D'une part, la personne ne peut désirer que quelques effets et, d'autre part, il n'est pas possible de prédire avec fiabilité ce qu'iel peut désirer à partir d'une partie de ses réponses. 
+
+### Analyse de classe latente
+
+Une analyse de classe latente permet de mettre en avant 3 grands profils de transition hormonale pour personnes non-binaires AFAB :
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+source("./scripts/AFAB_LCA.R", local = knitr::knit_global(), encoding = "UTF-8")
+```
+
+
+1) Un premier groupe qui représente `r label_percent()(AFAB_LCA[["P"]][1])` de l'échantillon et qui se caractérise par un plus grand désir de pilosité et d'agrandissement du dickclit que la moyenne des répondant‧e‧s
+2) Un deuxième groupe, qui réprésente `r label_percent()(AFAB_LCA[["P"]][2])` de l'échantillon et dont la quasi-totalité ne veut pas avoir de pilosité, avec un désir de répartition masculine des graisses et de majoration de la musculature légèrement supérieur à la moyenne 
+3) Un troisième groupe qui représente `r label_percent()(AFAB_LCA[["P"]][3])` de l'échantillon et dont les réponses sont plus souvent neutres que pour les deux premiers groupes. On retrouve une plus faible proportion de gens qui désirent une pilosité faciale ou un effet au niveau génital mais également une plus faible proportion de gens qui s'éloigneraient de leur point de confort si cela arrivait. 
+
+De manière pratique, il ne serait pas judicieux d'utiliser la même stratégie de traitement hormonal entre les groupes. Si la majorité des personnes du groupe 1 seraient sans doute satisfait‧e‧s avec une thérapie classique à base de testostérone, cela ne serait sans doute pas le cas des personnes du groupe 2 qui se retrouveraient avec une pilosité indésirable ainsi qu'un impact non-désiré au niveau génital.
+
+Evidemment, il ne s'agit que de grandes tendances qui ne peuvent résumer la diversité des réponses à ce questionnaire mais qui permettent de donner une idée générale. 
+
+## Point de confort des personnes non-binaires AMAB
+### Réponses du questionnaire 
+
+Les différentes réponses aux questionnaires se trouvent dans le tableau 2 : 
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+source("./scripts/create_AMAB_Table.R", local = knitr::knit_global(), encoding = "UTF-8")
+AMAB_Table
+```
+
+Les effets les plus fréquemment désirés sont une diminution de la pilosité corporelle, une répartition plus féminine des graisses, une diminution de la pilosité faciale ainsi qu'une peau plus souple et moins grasse. Moins de 10% des répondant‧e‧s s'éloigneraient de leur point de confort avec ces effets. 
+La taille des seins n'est souhaitée que par 58% des personnes, avec 1/3 qui s'éloigneraient de leur point de confort si leur poitrine grossissait. 
+Enfin, dans les effets les moins désirables, on retrouve une diminution de la masse musculaire, du volume des testicules et des érections. Ce dernier point provoquerait un malaise chez plus d'une personne sur deux. 
+
+### Corrélations entre les réponses
+
+Comme pour les personnes non-binaires AFAB, une analyse de corrélations entre les réponses a été réalisée afin de voir s'il existait un lien. 
+
+```{r message=FALSE, warning=FALSE}
+source("./scripts/create_AMAB_Corrplot.R", local = knitr::knit_global(), encoding = "UTF-8")
+```
+
+Ici aussi, on remarque que la majorité des réponses ne sont pas liées et que les corrélations statistiquement significatives restent faibles. Les deux plus fortes corrélations sont entre la diminution du volume des testicules et la diminution des érections ainsi qu'entre la pilosité corporelle et faciale. Cela signifie que les personnes qui désirent conserver leurs érections ont également tendance à vouloir conserver le volume de leurs testicules et inversement. De même, les personnes qui désirent moins de pilosité faciale ont également tendance à désirer moins de pilosité corporelle. Il ne s'agit ici que de corrélations moyennes et non d'un lien extrêmement fort. 
+On retrouve également un lien entre le désir de réparition féminine des graisses et assouplissement de la peau ainsi qu'entre la pilosité et la musculature, mais ces corrélations sont faibles. 
+
+### Analyse de classe latente
+
+L'analyse de classe latente chez les personnes non-binaires AMAB permet de mettre en évidence 2 groupes principaux : 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+source("./scripts/AMAB_LCA.R", local = knitr::knit_global(), encoding = "UTF-8")
+```
+
+1) Le premier groupe, qui représente `r label_percent()(AMAB_LCA[["P"]][1])` de l'échantillon et dont les désirs sont à l'image de ce qui a été présenté plus haut
+2) Un deuxième groupe qui représente `r label_percent()(AMAB_LCA[["P"]][2])` de l'échantillon et qui ne désire pas d'effet sur l'érection, la musculature, les testicules ou la pilosité. Les personnes dans cette catégorie attendent avant tout d'une THS un effet sur la poitrine, les griasses et la peau, à des degrés divers. 
+
+
+Comme pour les personnes non-binaires AFAB, ces deux tendances ne peuvent résumer la diversité des réponses à ce questionnaire et servent juste à se donner une idée générale. On constate une fois de plus qu'une THS classique à base d'oestradiol (+ anti-androgènes éventuels) ne permettrait pas à une partie substantielle des personnes non-binaires AMAB d'atteindre leur point de confort. 
+
+# Limitations
+
+Ce petit questionnaire n'est pas sans limitation. Tout d'abord, l'échantillon, s'il est important, n'est peut-être pas représentatif des personnes non-binaires. Il est nécessaire d'être prudent avant de généraliser ces résultats. Notamment, on retrouve une surreprésentation des personnes AFAB par rapport aux personnes ABAM qui pourrait être due au fait que le questionnaire ait majoritairement été partagé dans des groupes à destination des personnes transmasculines. 
+Deuxièmement, la non-binarité étant un parapluie regroupant une grande diversité d'identités différentes, il aurait été intéressant de demander aux gens comment ils s'identifient plutôt que de s'intéresser à une grande catégorie de personnes non-binaires. Néanmoins, cela aurait nécessité suffisamment de réponses pour chaque identité, ce qui peut être difficile à mettre en place. 
+
+Enfin, comme une personne concernée me l'avait fait remarquer sur Twitter, @Kirbybrasse, le questionnaire n'était pas adapté aux personnes dont l'identité est fluide au fil du temps ou qui pourraient désirer un effet partiellement. 
 
 
 
+# Conclusion
 
+Malgré ses limitations, ce questionnaire permet de s'intéresser au point de confort des personnes non-binaires qui désirent prendre des hormones, sujet sur lequel il existe très peu de ressource, et encore moins en français. 
+Cet article permet de constater que les thérapies hormonales classiques proposées aux personnes trans* risqueraient de ne pas permettre à une partie importante des personnes non-binaires d'atteindre leur point de confort. Il est donc nécessaire de réfléchir à des stratégies adaptées à chaque personne selon ses besoins. 
 
-
-
-
-
-
-
+Le prochain article de ce blog s'intéressera aux pistes possibles par rapport à la transition hormonale. Vu le peu de données scientifiques, il s'agira principalement d'un article d'hypothèses et de possibilités afin de proposer un document qui résume en français l'état des connaissances sur le sujet. Néanmoins, comme je le rapellerai dans l'article en question, il est important de garder à l'esprit que ces pistes restent encore expérimentales à l'heure actuelle. 

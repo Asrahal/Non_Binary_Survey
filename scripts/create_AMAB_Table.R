@@ -22,47 +22,47 @@ seq(0.1, 0.9, length.out = 12)
 eup_color(seq(0.1, 0.9, length.out = 12))
 
 
-AFAB_Table <- reactable(AFAB_Comb_Sum[1:4],
+AMAB_Table <- reactable(AMAB_Comb_Sum[1:4],
                         columns = list(
                           Freq.Dysphorie = colDef(name = "Indésirable",
                                                   cell = function(value) {
-                                                    paste0(value, " (", format(value * 100 / nrow(AFAB_Combined), digits = 1), "%)")
-                                                   
-                                                    },
+                                                    paste0(value, " (", format(value * 100 / nrow(AMAB_Combined), digits = 1), "%)")
+                                                    
+                                                  },
                                                   style = function(value) {
                                                     value
-                                                    normalized <- (value - min(AFAB_Comb_Sum$Freq.Dysphorie)) / (max(AFAB_Comb_Sum$Freq.Dysphorie) - min(AFAB_Comb_Sum$Freq.Dysphorie))
+                                                    normalized <- (value - min(AMAB_Comb_Sum$Freq.Dysphorie)) / (max(AMAB_Comb_Sum$Freq.Dysphorie) - min(AMAB_Comb_Sum$Freq.Dysphorie))
                                                     color <- dys_color(normalized)
                                                     list(background = color)
                                                   },
                                                   align = "left"),
                           Freq.Neutre = colDef(name = "Neutre",
                                                cell = function(value) {
-                                                 paste0(value, " (", format(value * 100 / nrow(AFAB_Combined), digits = 1), "%)")
+                                                 paste0(value, " (", format(value * 100 / nrow(AMAB_Combined), digits = 1), "%)")
                                                },
                                                style = function(value) {
                                                  value
-                                                 normalized <- (value - min(AFAB_Comb_Sum$Freq.Neutre)) / (max(AFAB_Comb_Sum$Freq.Neutre) - min(AFAB_Comb_Sum$Freq.Neutre))
+                                                 normalized <- (value - min(AMAB_Comb_Sum$Freq.Neutre)) / (max(AMAB_Comb_Sum$Freq.Neutre) - min(AMAB_Comb_Sum$Freq.Neutre))
                                                  color <- neut_color(normalized)
                                                  list(background = color)
                                                },
                                                align = "left"),
                           Freq.Euphorie = colDef(name = "Désirable",
                                                  cell = function(value) {
-                                                  paste0(value, " (", format(value * 100 / nrow(AFAB_Combined), digits = 1), "%)")
+                                                   paste0(value, " (", format(value * 100 / nrow(AMAB_Combined), digits = 1), "%)")
                                                  },
                                                  style = function(value) {
                                                    value
-                                                   normalized <- (value - min(AFAB_Comb_Sum$Freq.Euphorie)) / (max(AFAB_Comb_Sum$Freq.Euphorie) - min(AFAB_Comb_Sum$Freq.Euphorie))
+                                                   normalized <- (value - min(AMAB_Comb_Sum$Freq.Euphorie)) / (max(AMAB_Comb_Sum$Freq.Euphorie) - min(AMAB_Comb_Sum$Freq.Euphorie))
                                                    color <- eup_color(normalized)
                                                    list(background = color)
                                                  },
                                                  align = "left")),
                         
                         highlight = TRUE
-                        )
+)
 
-withr::with_dir('./Output/', saveWidget(frameableWidget(AFAB_Table), "afab-table.html"))
+withr::with_dir('./Output/', saveWidget(frameableWidget(AMAB_Table), "amab-table.html"))
 
 
 

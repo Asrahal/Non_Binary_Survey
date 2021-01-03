@@ -11,8 +11,7 @@ AFAB_LCA_Formula <- cbind(Facial_Hair,
                           Menses,
                           Alopecia) ~ 1 
 
-AFAB_Combined_LCA <- AFAB_Combined %>%
-  dplyr::select(-Alopecia)
+
 AFAB_LCA <- poLCA(AFAB_LCA_Formula, 
                   data = AFAB_Combined, 
                   nclass = 3, 
@@ -21,47 +20,19 @@ AFAB_LCA <- poLCA(AFAB_LCA_Formula,
                   nrep = 100)
 
 
-ggplot(tidy(AFAB_LCA), aes(factor(class), estimate, fill = factor(outcome))) +
+AFAB_LCA_Plot <- ggplot(tidy(AFAB_LCA), aes(factor(class), estimate, fill = factor(outcome))) +
   geom_bar(stat = "identity", width = 1) +
-  facet_wrap(~variable)
+  facet_wrap(~variable) +
+  scale_fill_manual(values=c("#ed7b84", "#FADF75","#5bc2a3"), 
+                    name = "Réponse", 
+                    labels = c("Indésirable", "Neutre", "Désirable")) +
+  scale_x_discrete(name = "Classe")
 
 
-AMAB_LCA_Formula <- cbind(Breast,
-                          Skin,
-                          Erection,
-                          Testes,
-                          Fat,
-                          Facial_Hair,
-                          Body_Hair,
-                          Muscle) ~ 1
-AMAB_LCA <- poLCA(AMAB_LCA_Formula, 
-                  data = AMAB_Combined, 
-                  nclass = 3, 
-                  graphs = FALSE, 
-                  maxiter = 1000, 
-                  nrep = 100)
-ggplot(tidy(AMAB_LCA), aes(factor(class), estimate, fill = factor(outcome))) +
-  geom_bar(stat = "identity", width = 1) +
-  facet_wrap(~variable)
-
-
-for (i in 2:2) {
-  max_ll <- -100000
-  min_bic <- 10000
-  for (j in 1:10) {
-    res <- poLCA(AFAB_LCA_Formula, 
-                 data = AFAB_Combined, 
-                 nclass = i, 
-                 tol = 1e-5,
-                 nrep = 30)
-    if(res$bic < min_bic) {
-      min_bic <- res$bic
-      LCA_best_model <- res
-    }
-  }
-}
-LCA_best_model
-plot(LCA_best_model)
-
-
-
+ggsave(
+  "./plots/AFAB_LCA_Plot.png",
+  plot = AFAB_LCA_Plot,
+  scale = 2,
+  dpi = 300,
+  limitsize = TRUE
+)
